@@ -53,3 +53,4 @@ misc.xml
 .idea/modules/Services_main.iml
 .idea/modules/Services_test.iml
 WEB-INF/appengine-generated/datastore-indexes-auto.xml
+.idea/
