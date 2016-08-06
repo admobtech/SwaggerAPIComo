@@ -1,0 +1,55 @@
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+
+#*.iml
+
+## Directory-based project format:
+#.idea/
+# if you remove the above rule, at least ignore the following:
+
+# User-specific stuff:
+ .idea/workspace.xml
+ .idea/tasks.xml
+ .idea/dictionaries
+ .idea/shelf
+
+# Sensitive or high-churn files:
+ .idea/dataSources.ids
+ .idea/dataSources.xml
+ .idea/sqlDataSources.xml
+ .idea/dynamic.xml
+ .idea/uiDesigner.xml
+
+# Gradle:
+ .idea/gradle.xml
+ .idea/libraries
+
+## File-based project format:
+*.ipr
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+/build/
+
+# Gradle
+.gradle
+/.idea/libraries
+local.properties
+gradle.properties
+
+.idea/artifacts
+WEB-INF/appengine-generated/local_db.bin
+compiler.xml
+misc.xml
+.idea/dictionaries/eliran.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/modules.xml
+.idea/modules/Services.iml
+.idea/modules/Services_endpointsSrc.iml
+.idea/modules/Services_functionalTest.iml
+.idea/modules/Services_main.iml
+.idea/modules/Services_test.iml
+WEB-INF/appengine-generated/datastore-indexes-auto.xml
