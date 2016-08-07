@@ -7,6 +7,11 @@ buildscript {
 		appengine_version = '1.9.32'
 		appengine_plugin_version = '1.9.32'
 		jackson_version = '2.7.3'
+		jersey_version = '2.23.1'
+		logback_version ='1.1.7'
+		dozer_version = '5.5.1'
+		guice_version = '4.0'
+		hibernate_version = '5.2.1.Final'
 	}
 	repositories {
 		mavenCentral()
@@ -33,7 +38,8 @@ repositories {
 dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-	compile group: 'io.swagger', name: 'swagger-codegen-cli', version: '2.2.0'
+	compile "io.swagger:swagger-codegen-cli:2.2.0"
+	compile "io.swagger:swagger-jersey2-jaxrs:1.5.9"
 	appengineSdk "com.google.appengine:appengine-java-sdk:$appengine_version"
 	compile "com.google.appengine:appengine-api-1.0-sdk:$appengine_version"
 //	compile "com.google.appengine:appengine-api-labs:$appengine_version"
@@ -45,17 +51,52 @@ dependencies {
 //	compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
 //	compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
 //	compile "com.fasterxml.jackson.module:jackson-module-afterburner:$jackson_version"
-	compile 'com.google.guava:guava:19.0'
 //	compile 'com.io7m.xom:xom:1.2.10'
-	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
-	compile 'commons-codec:commons-codec:1.10'
+//	compile 'commons-codec:commons-codec:1.10'
 //	compile 'net.sf.dozer:dozer:5.4.0'
 
+
+	// Kotlin
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//	compile "com.google.inject:guice:$guice_version"
+//	compile "org.hibernate:hibernate-core:$hibernate_version"
+	// Web Services
+	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+	compile "com.sun.xml.ws:jaxws-rt:2.1.3"
+	// Servlet API
+	compileOnly 'javax.servlet:javax.servlet-api:3.0.1'
+
+	// Web Client
+	compile "org.glassfish.jersey.core:jersey-client:$jersey_version"
+	compile "org.glassfish.jersey.containers:jersey-container-servlet:$jersey_version"
+	compile "org.glassfish.jersey.ext:jersey-bean-validation:$jersey_version"
+	compile "org.glassfish.jersey.media:jersey-media-json-jackson:$jersey_version"
+
+	// Web Serialization Provider
+	compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jackson_version"
+	// Json Serialization
+	compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+	compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+	compile "com.fasterxml.jackson.module:jackson-module-afterburner:$jackson_version"
+	compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
+	// XML Serialization
+//	compile "org.json:json:20160212"
+
+	// Logging
+//	compile "ch.qos.logback:logback-classic:$logback_version"
+
+
+//	compile "com.mchange:c3p0:$c3p0_version"
+//	compileOnly "mysql:mysql-connector-java:$mysql_version"
+//	compile 'commons-dbutils:commons-dbutils:1.6'
+//	compile  'org.jdbi:jdbi:2.73'
+
+
+	compile 'com.google.guava:guava:19.0'
+//	compile "net.sf.dozer:dozer:$dozer_version"
+
 	testCompile group: 'junit', name: 'junit', version: '4.11'
-//	testCompile "com.google.appengine:appengine-api-stubs:$appengine_version"
-//	testCompile "org.mockito:mockito-core:1.10.19"
-//	testCompile 'org.powermock:powermock-api-mockito:1.6.4'
-//	testCompile 'org.powermock:powermock-module-junit4:1.6.4'
+
 }
 
 
