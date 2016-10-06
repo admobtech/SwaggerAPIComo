@@ -165,57 +165,60 @@
         ]
       }
     },
-    "/Redeem":{
-      "post":{
-        "summary":"Redeem",
-        "description":"The API call retrieves the Benefits of gifts that the customer asked to redeem. The gifts are referenced by a RedeemItem (RedeemCode/AssetKey).RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app) *AssetKeys are acquired from the GetMemberDetails call (see Redeem via POS).<br>Allows the POS to send club members' purchase details and information to Como. The purchase details can contain the complete shopping cart or only the total amount paid; With this module a set of purchase based reward tools and features become available to the business through the Como control panel; including: cash-back, points accumulation, automatic punching of the customer’s punch cards based on specific items in the cart; and special deals such as 'buy an item and receive a coupon for your next visit' and more. When to use; After the final payment. <br>As long as a RedeemItem is not marked as 'used', future Redeem API calls will succeed. If the Benefits were delivered to the customer it must be marked as 'used' with one of the following methods: *Pass the RedeemItem to the SubmitPurchase API call via the RedeemItems field. NOTE; To protect RedeemItem from multiple redeem attempts, a lock is implemented using the BranchID, PosID and TransactionID, if provided. The lock will be active for a limited time frame set by the business in the admin panel,     *Pass MarkAsUsed flag to the Redeem API call.",
-        "consumes":[
-          "application/json"
-        ],
-        "produces":[
-          "application/json"
-        ],
-        "responses":{
-          "200":{
-            "description":"Successful operation",
-            "schema":{  
-              "$ref":"#/definitions/RedeemItemsResponse"
+    "/Redeem": {
+      "post": {
+        "summary": "Redeem",
+        "description": "The API call retrieves the Benefits of gifts that the customer asked to redeem. The gifts are referenced by a RedeemItem (RedeemCode/AssetKey).RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app) *AssetKeys are acquired from the GetMemberDetails call (see Redeem via POS).<br>Allows the POS to send club members' purchase details and information to Como. The purchase details can contain the complete shopping cart or only the total amount paid; With this module a set of purchase based reward tools and features become available to the business through the Como control panel; including: cash-back, points accumulation, automatic punching of the customer’s punch cards based on specific items in the cart; and special deals such as 'buy an item and receive a coupon for your next visit' and more. When to use; After the final payment. <br>As long as a RedeemItem is not marked as 'used', future Redeem API calls will succeed. If the Benefits were delivered to the customer it must be marked as 'used' with one of the following methods: *Pass the RedeemItem to the SubmitPurchase API call via the RedeemItems field. NOTE; To protect RedeemItem from multiple redeem attempts, a lock is implemented using the BranchID, PosID and TransactionID, if provided. The lock will be active for a limited time frame set by the business in the admin panel, *Pass MarkAsUsed flag to the Redeem API call.",
+        "responses": {
+        "200": {
+        "description": "Successful operation",
+        "schema": {
+        "$ref": "#/definitions/RedeemItemsResponse"
             }
           },
-          "default":{
-            "description":"Unexpected error"
+          "default": {
+            "description": "Unexpected error"
           }
         },
-        "parameters":[
-          {  
-            "in":"body",
-            "name":"body",
-            "description":"RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app)",
-            "required":true,
-            "schema":{
-              "$ref":"#/definitions/RedeemRequest"
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app)",
+            "schema": {
+              "$ref": "#/definitions/RedeemRequest"
             }
           },
-          {  
-            "name":"MimeType",
-            "in":"query",
-            "required":true,
-            "type":"string",
-            "enum":[  
+          {
+            "name": "MimeType",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "application/json",
+            "enum": [
               "application/json"
             ]
           },
-          {  
-            "name":"InputType",
-            "in":"query",
-            "required":true,
-            "type":"string",
-            "enum":[  
+          {
+            "name": "InputType",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "json",
+            "enum": [
               "json"
             ]
           }
         ]
-      }
+      },
+      "allOf":[
+        {
+          "$ref":"#/definitions/SubmitPurchaseRequest"
+        }
+      ]
     },
     "/SubmitPurchase":{  
       "post":{  
@@ -269,17 +272,17 @@
         ]
       }
     },
-    "/CancelBudgetPayment":{ 
-      "post":{  
+    "/CancelBudgetPayment":{
+      "post":{
         "summary":"Cancel Budget Payment.",
         "description":"Allows the POS to cancel a Budget Payment using the payment UID code from the PayWithBudget.",
-        "consumes":[  
+        "consumes":[
           "application/json"
         ],
-        "produces":[  
+        "produces":[
           "application/json"
         ],
-        "responses":{  
+        "responses":{
           "200":{  
             "description":"Successful operation",
             "schema":{  
