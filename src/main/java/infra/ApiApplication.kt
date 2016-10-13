@@ -15,12 +15,7 @@ class ApiApplication: ResourceConfig {
 
 	constructor() {
 
-		register(ComoApplicationBinder());
 		register(LoggingFilter(Logger.getLogger(LoggingFilter::class.java.name), true))
-		register(ContextResolver<ValidationConfig> {
-			ValidationConfig().parameterNameProvider(RestParameterNameProvider());
-		})
-		register(JacksonMapperProvider());
 		register(RolesAllowedDynamicFeature::class.java)
 	}
 
