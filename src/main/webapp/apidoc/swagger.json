@@ -6,7 +6,7 @@
     "version": "2.6.0",
     "termsOfService": "https://apidoc-dot-zipory-alpha.appspot.com/apidoc/"
   },
-  "host": "apidoc-dot-zipory-alpha.appspot.com",
+  "host": "api-dot-zipory-alpha.appspot.com",
   "basePath": "/alpha/api",
   "schemes": [
     "https"
