@@ -103,7 +103,7 @@ dependencies {
 appengine {
 	httpPort = 8080
 
-	jvmFlags = ['-Xdebug', '-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n',  '-Dappengine.fullscan.seconds=5', '-Dtask_queue.disable_auto_task_execution=true',"-Ddatastore.backing_store=$local_db_location",'-Dappengine.generated.dir=$HOME/Development/gae/']
+	jvmFlags = ['-Xdebug', '-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n',  '-Dappengine.fullscan.seconds=5', '-Dtask_queue.disable_auto_task_execution=true','-Dappengine.generated.dir=$HOME/Development/gae/']
 
 	appcfg {
 		//email = 'tamar.zilbar@gmail.com'
