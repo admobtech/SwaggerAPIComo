@@ -83,7 +83,7 @@
                     log("Unable to Load SwaggerUI");
                 },
                 //Start Request in body, addition configurations.
-                docExpansion: 'full',
+                docExpansion: 'none',
                 jsonEditor: true,
                 jsonEditorOptions: {
                     defaultModelRendering: 'schema',
@@ -100,7 +100,7 @@
             function addApiKeyAuthorization() {
                 var key = encodeURIComponent($('#input_apiKey')[0].value);
                 if (key && key.trim() != "") {
-                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api-key", key, "query");
+                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api-key", key, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                     log("added key " + key);
                 }
