@@ -3,8 +3,12 @@
   "info": {
     "title": "Como API Documentation",
     "description": "API Calls and Specification.",
-    "version": "2.6.0",
-    "termsOfService": "https://apidoc-dot-zipory-alpha.appspot.com/apidoc/"
+    "version": "2.7.2",
+    "termsOfService": "https://apidoc-dot-zipory-alpha.appspot.com/apidoc/",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
   },
   "host": "api-dot-zipory-alpha.appspot.com",
   "basePath": "/alpha/api",
@@ -21,7 +25,7 @@
     "/Info": {
       "get": {
         "summary": "General Information",
-        "description": "General information about the API. <br>This document describes the Como API for external services that wish to integrate with the Como CLM (Customer Loyalty Management) platform.While most of the document uses a POS semantic, all API calls can be made from any kind of service with web access, including POSs, ecommerce sites, vending machines, gas station pumps, etc...<br><br>The first part covers the basic communication format of the API. <br>The second part describes the available API calls. <br>For development stage Como provides a testing server containing a demo business with real life scenarios for a meaningful and efficient development and testing process.<br>(To download the hard copy of this document, please follow this link: <U>https://goo.gl/l7Udm4)</U></a><br><br><B><I><U>Como API Servers</U></I><br>Development: </B><br>Host: <U>https://api-dot-zipory-alpha.appspot.com</U> | api-key: 123454321<br><br><B>Production:</B><br>Host: <U>https://api-dot-zipory-alpha.appspot.com</U> | api-key: provided by the business.<br><br><B>Production with static IP address:</B><br/>Host: https://api.keeprz.com | api-key: provided by the business<br/>IP-address: 107.178.216.8<br><br>NOTE: For scale and performance reasons, Como API servers are hosted on a cloud platform. As a result, the IP address of the servers may change over time or even differ when accessed from different locations.When a static IP is mandatory use the host specified above.<br><br>Using HTTP Instead of HTTPS:<br/>For cases when HTTPS is not possible you can use HTTP with a pre shared encryption key.<br>The encryption is only used for requests. responses will be returned without encryption.<br>When using HTTP change path of the API from <U>alpha/api/…</U> to <U>alpha/enc-api/…</U><br>To encrypt the request data:<br>1- Hash the raw encryption key with SHA1<br/>2- Use the hashed key to create an AES encryption key<br/>3- Encode the request data as base64 string and encrypt with AES/ECB/PKCS5Padding transformation.<br/>4-Create the request with the encrypted data in a property called <U>data</U><br/><br><B><U>Request Format</U></B><br/>The POST body is a <U>UTF-8</U> encoded object. The URL for the request should be built as follows:<br/>1- API server host.<br/>2- Prefix path: for HTTPS use - alpha/api/, for HTTP use - alpha/enc-api/<br/>followed by the name of the API call<br/>3- Path params: MimeType=application/json, InputType=json, api-key=XXXXXX<br/>When the development stage is complete configuration for the API from the POS should be:<br><br/>1- Production server: <U>https://api-dot-zipory-alpha.appspot.com</U><br/>Auto filled but if possible editable<br>2- api-key: the id of a live business<br>3.BranchID: the id of the branch that the POS is in<br>Auto filled if there is such id managed by the POS but if possible editable.",
+        "description": "General information about the API. <br>This document describes the Como API for external services that wish to integrate with the Como CLM (Customer Loyalty Management) platform.While most of the document uses a POS semantic, all API calls can be made from any kind of service with web access, including POSs, e-commerce sites, vending machines, gas station pumps, etc...<br><br>The first part covers the basic communication format of the API. <br>The second part describes the available API calls. <br>For development stage Como provides a testing server containing a demo business with real life scenarios for a meaningful and efficient development and testing process.<br>(To download the hard copy of this document, please follow this link: <U>https://goo.gl/l7Udm4)</U></a><br><br><B><I><U>Como API Servers</U></I><br>Development: </B><br>Host: <U>https://api-dot-zipory-alpha.appspot.com</U> | api-key: 123454321<br><br><B>Production:</B><br>Host: <U>https://api-dot-zipory-alpha.appspot.com</U> | api-key: provided by the business.<br><br><B>Production with static IP address:</B><br/>Host: https://api.keeprz.com | api-key: provided by the business<br/>IP-address: 107.178.216.8<br><br>NOTE: For scale and performance reasons, Como API servers are hosted on a cloud platform. As a result, the IP address of the servers may change over time or even differ when accessed from different locations.When a static IP is mandatory use the host specified above.<br><br>Using HTTP Instead of HTTPS:<br/>For cases when HTTPS is not possible you can use HTTP with a pre shared encryption key.<br>The encryption is only used for requests. responses will be returned without encryption.<br>When using HTTP change path of the API from <U>alpha/api/…</U> to <U>alpha/enc-api/…</U><br>To encrypt the request data:<br>1- Hash the raw encryption key with SHA1<br/>2- Use the hashed key to create an AES encryption key<br/>3- Encode the request data as base64 string and encrypt with AES/ECB/PKCS5Padding transformation.<br/>4-Create the request with the encrypted data in a property called <U>data</U><br/><br><B><U>Request Format</U></B><br/>The POST body is a <U>UTF-8</U> encoded object. The URL for the request should be built as follows:<br/>1- API server host.<br/>2- Prefix path: for HTTPS use - alpha/api/, for HTTP use - alpha/enc-api/<br/>followed by the name of the API call<br/>3- Path params: MimeType=application/json, InputType=json, api-key=XXXXXX<br/>When the development stage is complete configuration for the API from the POS should be:<br><br/>1- Production server: <U>https://api-dot-zipory-alpha.appspot.com</U><br/>Auto filled but if possible editable<br>2- api-key: the id of a live business<br>3.BranchID: the id of the branch that the POS is in<br>Auto filled if there is such id managed by the POS but if possible editable.",
         "tags": [
           "Como API"
         ]
@@ -30,7 +34,7 @@
     "/GetMemberDetails": {
       "post": {
         "summary": "Get Member Details",
-        "description": "This API call is used to get details about existing Como club members. The response will return a list of Club Member objects or an error if the identifying customer is not a member of the club. With this API call the POS can enable Redeem via POS to allow gift redeeming directly from the POS.",
+        "description": "This API call is used to verify the customer is a club member, receive membership details (name, point balance, etc.) and receive asset details. <br><br>The response will return a list of Club Member objects or an error if the identifying customer is not club member. With this API call, the POS can enable Redeem via POS to allow assets to be redeemed directly from the POS. <br><br>When to use: <br>&bull;&nbsp;&nbsp; &nbsp;At the start of the transaction to verify the customer is a club member and display details<br>&bull;&nbsp;&nbsp; &nbsp;When requested to display or redeem the assets of a club member (see Redeem via POS)<br><br><img src='http://como-api-doc.s3.amazonaws.com/getmemberdetails.png' style='width:auto; height:auto;'>",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -47,8 +51,7 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
-          "description": "Identifiers: (PhoneNumber/MemberID/GovID/AppClientID), Us only one identification method at same request",
+          "name": "Request",
           "required": false,
           "schema": {
             "$ref": "#/definitions/GetMemberDetailsRequest"
@@ -77,7 +80,7 @@
     "/GetMemberBenefits": {
       "post": {
         "summary": "Get Member Benefits",
-        "description": "This API call returns the Benefits a member should receive just for being a club member. <br> The Benefits returned from this API are not for one time use. A typical reward could be; 10% discount for every club member. NOTE: Benefits returned from this service may take into account the contents of the shopping cart. <br> Therefore it is advisable to perform this request when the shopping cart is finalized just before closing the purchase and optionally when the cart is changed or upon explicit request by the cashier.When to use,<br> *After identifying a customer 'for benefits that are independent of the cart' <br> *A partial bill was requested by the customers <br> *At the final checkout.<br> NOTE, If GetMemberBenefits is called multiple times, make sure you clear the previously returned benefits and add the new resulted benefits each time. <br>Note that some POS systems cannot delete items from the shopping cart. It is the responsibility of the business not to send items as benefits for GetMemberBenefits.",
+        "description": "This API call is used to apply club deals to the member&rsquo;s purchase&mdash;benefits that all members receive just for being club members. For example, it can be a 10% discount on the purchase or $5 off specific items. The Benefits returned from this call are not for one-time use.<br><br>When to use: <br>&bull;&nbsp;&nbsp; &nbsp;After a member identifies<br>&bull;&nbsp;&nbsp; &nbsp;When a cashier taps to print the check (e.g. bill in a restaurant)<br>&bull;&nbsp;&nbsp; &nbsp;At the final checkout when the cashier taps to continue to the payment page<br>Notes:<br>&bull;&nbsp;&nbsp; &nbsp;Benefits returned from this call may take into account the contents of the shopping cart. Therefore, it is advisable to perform this request when the shopping cart is finalized just before closing the purchase, and optionally when the cart is changed or upon explicit request by the cashier.<br>&bull;&nbsp;&nbsp; &nbsp;If GetMemberBenefits is called multiple times, make sure you clear the previously returned benefits and add the new benefits each time. However, if the POS cannot delete items from the shopping cart, it should only be called at the end.<br><br>Request Format <br><br>Note: The GetMemberBenefits API call should send all the fields of the SubmitPurchase API call. Como needs the purchase details in order to validate benefits that are defined in our system (e.g. Discounts)<br><br><img src='http://como-api-doc.s3.amazonaws.com/getmemberbenefits.png' style='width:auto;height:auto;'>",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -94,8 +97,8 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
-          "description": "This API call returns the Benefits a member should receive just for being a club member. The Benefits returned from this API are not for one time use. A typical reward could be: 10% discount for every club member.",
+          "name": "Request",
+          "description": "",
           "required": false,
           "schema": {
             "$ref": "#/definitions/GetMemberBenefitsRequest"
@@ -122,7 +125,7 @@
     "/Redeem": {
       "post": {
         "summary": "Redeem",
-        "description": "The API call retrieves the Benefits of gifts that the customer asked to redeem. The gifts are referenced by a RedeemItem (RedeemCode/AssetKey).RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app) *AssetKeys are acquired from the GetMemberDetails call (see Redeem via POS).<br>Allows the POS to send club members' purchase details and information to Como. The purchase details can contain the complete shopping cart or only the total amount paid; With this module a set of purchase based reward tools and features become available to the business through the Como control panel; including: cash-back, points accumulation, automatic punching of the customer’s punch cards based on specific items in the cart; and special deals such as 'buy an item and receive a coupon for your next visit' and more. When to use; After the final payment. <br>As long as a RedeemItem is not marked as 'used', future Redeem API calls will succeed. If the Benefits were delivered to the customer it must be marked as 'used' with one of the following methods: *Pass the RedeemItem to the SubmitPurchase API call via the RedeemItems field. NOTE; To protect RedeemItem from multiple redeem attempts, a lock is implemented using the BranchID, PosID and TransactionID, if provided. The lock will be active for a limited time frame set by the business in the admin panel, *Pass MarkAsUsed flag to the Redeem API call.",
+        "description": "This API call allows members to redeem an asset (gift or punch card) to receive some type of benefit. For example, they could receive a free coffee or $5 off their purchase.<br><br>The asset the member wants to redeem is referenced in the request by RedeemItems and the response returns Benefits corresponding to this asset. RedeemItems can be sent as either: <br>&bull;&nbsp;&nbsp; &nbsp;RedeemCodes &ndash; that a member generates from their app (as a number, QR or barcode)<br>&bull;&nbsp;&nbsp; &nbsp;AssetKeys &ndash; that are acquired from the GetMemberDetails call (see Redeem via POS)<br>Note: Each RedeemItem should include either RedeemCodes or AssetKeys but not both.<br><br>Customers should only be able to redeem each asset once. So when they receive the benefit, the RedeemItem should be marked as&ldquo;used&rdquo; to prevent it from being re-used in future Redeem calls. It can be marked as used in two ways:<br>&bull;&nbsp;&nbsp; &nbsp;Using the Redeem call&mdash;by passing the MarkAsUsed flag as true (or if the business selects to mark it as used from the management console)<br>&bull;&nbsp;&nbsp; &nbsp;Using the SubmitPurchase call&mdash;by passing the RedeemItem<br>Note: If the Redeem call doesn&rsquo;t mark the RedeemItem as used, a member can try to redeem the same asset in a different transaction (before SubmitPurchase is sent for the first). To prevent the RedeemItem from being sent again, a lock is implemented using the BranchID, PosID and TransactionID (if provided). The lock will be active for a limited time frame, set by the business in the management console.<br><br>Request Format:<br>Note: The Redeem API call should send all the fields of the SubmitPurchase API call. Como needs the purchase details in order to validate benefits that are defined in our system (as Discounts). If the Redeem API call is resent during the same transaction (to redeem additional assets), the Price of items in the Items array should reflect the discounts provided by the previous Redeem call.<br><br><img src='http://como-api-doc.s3.amazonaws.com/redeem.png' style='width:auto;height:auto;'>.",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -139,7 +142,7 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
+          "name": "Request",
           "description": "RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app)",
           "required": false,
           "schema": {
@@ -167,7 +170,7 @@
     "/SubmitPurchase": {
       "post": {
         "summary": "Submit Purchase",
-        "description": "Allows the POS to send club members' purchase details and information to Como. <br>The purchase details can contain the complete shopping cart or only the total amount paid.<br>With this module a set of purchase based reward tools and features become available to the business through the Como control panel, including: cash-back, points accumulation, automatic punching of the customer’s punch cards based on specific items in the cart, and special deals such as 'buy an item and receive a coupon for your next visit' and more. <br>When to use: After the final payment.",
+        "description": "Once the transaction is completed, this API call is used to send Como a club member’s purchase details—such as the total amount paid and the complete shopping cart. These purchase details are used by Como to segment members or perform actions on them—such as automatically punch their punch cards (based on specific items in the cart), give them points or send them other rewards.<br><br>When to use:<br> After the final payment.<br><br><img src='http://como-api-doc.s3.amazonaws.com/submit.png' style='width:auto;height:auto;'>.",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -184,7 +187,7 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
+          "name": "Request",
           "description": "SubmitPurchase",
           "required": false,
           "schema": {
@@ -214,7 +217,7 @@
     "/CancelPurchase": {
       "post": {
         "summary": "Cancel Purchase",
-        "description": "Allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call. Submitting a purchase can result in several automatic, cascading, loyalty club operations on this customer. Due to this cascading effect, the business has an option to delay the performing of the automated purchase tasks, thus creating a 'cancellation window'",
+        "description": "Allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call. Submitting a purchase can result in several automatic, cascading, loyalty club operations on this customer. Due to this cascading effect, the business has an option to delay the performing of the automated purchase tasks, thus creating a 'cancellation window'This API call allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call. <br><br>Notes:<br>&bull;&nbsp;&nbsp; &nbsp;If a member pays for their purchases using the PayWithBudget call and then cancels their purchase using the CancelPurchase call, the CancelBudgetPayment call should also be sent to cancel the budget payment.<br>&bull;&nbsp;&nbsp; &nbsp;In the management console, a business can configure the following settings:<br>&nbsp;&nbsp; &nbsp;&bull;&nbsp;&nbsp;&nbsp;a &ldquo;cancellation window&rdquo;&mdash;a time period in which the CancelPurchase call can be sent<br>&nbsp;&nbsp; &nbsp;&bull;&nbsp;&nbsp;&nbsp;whether or not the CancelPurchase call can be sent outside of this window<br><br><img src='http://como-api-doc.s3.amazonaws.com/cancel-submit.png' style='width:auto;height:auto;'>.",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -231,7 +234,7 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
+          "name": "Request",
           "description": "Allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call.",
           "schema": {
             "$ref": "#/definitions/CancelPurchaseRequest"
@@ -258,7 +261,7 @@
     "/PayWithBudget": {
       "post": {
         "summary": "Pay With Budget",
-        "description": "The call allows Como’s customers to use their club budget to pay at the POS. <br>The business may select one of the following identification processes for payment; <br>*Providing club identification (Customers field) and an optional verification code; <br>*Providing a verification code that also encodes the club member identity <br>Note; the business can control the identification and verification options in the administration panel. <br>The POS must present a UI that supports all options in the API, to a support any setting selected by the business.",
+        "description": "This API call allows customers to pay for their purchase using their budget, points, gift card or mobile payments.<br><br>The business can secure these payments by requiring members to provide a verification code at the POS. Through the management console, the business can configure the following settings:<br>&bull;&nbsp;&nbsp; &nbsp;whether or not to require a verification code<br>&bull;&nbsp;&nbsp; &nbsp;whether to send members this code by SMS or allow them to generate the code from the app<br><br>Note: To send the code by SMS: PayWithBudget is first sent without a verification code. When the payment request fails, Como automatically sends a code to the member&rsquo;s device. This code can then be used to send a successful PayWithBudget call.<br>&bull;&nbsp;&nbsp; &nbsp;whether or not to allow customers to pay using a verification code, without identifying<br> &bull;&nbsp;&nbsp; &nbsp;whether or not to allow members to pay without a verification code when they identify with an AppClientID<br><br>Note: To support any settings selected by the business, the POS must present a UI that supports all options in the API&mdash;including the text box for verification code input.<br><br>Unlike budget/point/mobile payments, gift card payments can be made by non-members. In this case, the gift card number is entered as the verification code.<br><br><img src='http://como-api-doc.s3.amazonaws.com/paywithbudget.png' style='width:auto;height:auto;'>.",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -275,7 +278,7 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
+          "name": "Request",
           "description": "The verification code will be provided by the member (from the app, SMS, etc.)",
           "required": false,
           "schema": {
@@ -303,7 +306,7 @@
     "/CancelBudgetPayment": {
       "post": {
         "summary": "Cancel Budget Payment",
-        "description": "Allows the POS to cancel a Budget Payment using the payment UID code from the PayWithBudget.",
+        "description": "This API call allows the POS to cancel a budget/point/gift card/mobile payment using the payment UID code from the PayWithBudget call.<br><br>Note:<br>When the CancelBudgetPayment is sent after the purchase is completed, the CancelPurchase call should also be sent to ensure the purchase is also cancelled (in addition to the budget/point/gift card/mobile payment).<br><br><img src='http://como-api-doc.s3.amazonaws.com/paywithbudget.png' style='width:auto;height:auto;'>.",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -320,8 +323,8 @@
         ],
         "parameters": [{
           "in": "body",
-          "name": "body",
-          "description": "CancelBudgetPayment",
+          "name": "Request",
+          "description": "Cancel Budget Payment",
           "schema": {
             "$ref": "#/definitions/CancelBudgetPaymentRequest"
           }
@@ -344,10 +347,9 @@
         }]
       }
     },
-
     "parameters": [{
       "in": "body",
-      "name": "body",
+      "name": "Request",
       "description": "Allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call.",
       "schema": {
         "$ref": "#/definitions/CancelPurchaseRequest"
@@ -368,7 +370,52 @@
       "enum": [
         "json"
       ]
-    }]
+    }],
+    "/SubmitEvent": {
+      "post": {
+        "summary": "Submit Event",
+        "description": "This API call allows Como to receive information about external events that occurred to specific club members. <br>Based on this information, Como can segment members and automatically perform certain actions on them (like send them a special coupon or a push notification).<br><br><img src='http://como-api-doc.s3.amazonaws.com/paywithbudget.png' style='width:auto;height:auto;'>.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/SubmitEventResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Future Feature"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "The verification code will be provided by the member (from the app, SMS, etc.)",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/SubmitEventRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    }
   },
   "definitions": {
     "RedeemRequest": {
@@ -403,10 +450,6 @@
         }
       }
     },
-
-
-
-
     "RedeemItem": {
       "type": "object",
       "properties": {
@@ -420,7 +463,6 @@
         }
       }
     },
-
     "SubmitPurchaseRequest": {
       "type": "object",
       "required": [
@@ -533,7 +575,7 @@
         },
         "TotalSum": {
           "type": "integer",
-          "minimum": 10,
+          "minimum": 1,
           "exclusiveMinimum": true,
           "description": "Total amount paid in cents, Required field *"
         },
@@ -1084,6 +1126,83 @@
         "Result": {
           "type": "string",
           "description": "Indicate if the API call succeeded or failed."
+        }
+      }
+    },
+    "SubmitEventRequest": {
+      "type": "object",
+
+      "properties": {
+        "EventTime": {
+          "type": "string",
+          "format": "date",
+          "description": "Date and time the event occurred *"
+        },
+        "Customers": {
+          "type": "array",
+          "description":"A general purpose array of member identifiers*",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "Type": {
+          "type": "string",
+          "description": "Event type (e.g. Beacon signal) *"
+        },
+        "SubType": {
+          "type": "string",
+          "description": "Event subtype (e.g. Enter)"
+        },
+        "Tags": {
+          "type": "string",
+          "description": "Event tags (can be used to relate several events together)"
+        },
+        "Data": {
+          "type": "array",
+          "description":"A general purpose array of member identifiers*",
+          "items": {
+            "$ref": "#/definitions/Data"
+          }
+        }
+      }
+    },
+    "SubmitEventResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Result 'Y'/'N' Indicates if the API call succeeded or failed."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Inner status of the transaction."
+        },
+        "Token": {
+          "type": "string",
+          "description": "A unique identifier of the transaction."
+        }
+      }
+    },
+    "Data": {
+      "type": "object",
+      "properties": {
+        "StringValue": {
+          "type": "string",
+          "description": "Any string value."
+        },
+        "DateValue": {
+          "type": "string",
+          "format": "date",
+          "description": "A date value in UNIX Timestamp format."
+        },
+        "NumericValue": {
+          "type": "number",
+          "format":"double",
+          "description": "Any string value."
+        },
+        "BooleanValue": {
+          "type": "boolean",
+          "description": "True / False."
         }
       }
     }
