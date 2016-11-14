@@ -116,9 +116,9 @@
             function addApiKeyAuthorization() {
                 var key = encodeURIComponent($('#input_apiKey')[0].value);
                 if (key && key.trim() != "") {
-                    //var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api-key", key, "query");
+                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api-key", key, "query");
                     //experemental:
-                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + key, "header");
+                    //var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + key, "header");
                     //end experemental
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                     log("added key " + key);
