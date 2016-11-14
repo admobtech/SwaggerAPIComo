@@ -59,7 +59,7 @@
                 url = decodeURIComponent(url[1]);
             } else {
                 //The root swagger file to load the webpage
-                url = window.location.toString().replace(/\/*#?.*/, 'swagger.json');
+                url = window.location.toString().replace(/\/*#?.*/, + 'swagger.json');
                 //url = window.location + 'swagger.json';
             }
 
