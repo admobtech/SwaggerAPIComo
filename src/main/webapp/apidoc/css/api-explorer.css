@@ -278,15 +278,14 @@
 */
 .swagger-section .parameter-item .param-property {
     padding: 20px;
-    line-height: 1.4;
-    border-bottom: 1px solid #e8eaeb;
+    line-height: 1.6;
+    border-bottom: 2px solid #e8eaeb;
     min-height: 59px
 }
 
 @media (min-width: 992px) {
     .swagger-section .parameter-item .param-property {
         position: relative;
-        padding-left: 150px
     }
 
     .swagger-section .parameter-item .param-property:hover {
@@ -306,14 +305,8 @@
 
 @media (min-width: 992px) {
     .swagger-section .parameter-item .param-property:before {
-        position: absolute;
-        top: 28px;
-        left: 0;
-        display: inline-block;
-        width: 150px;
-        vertical-align: top;
-        text-align: right;
-        padding: 0 20px
+        display: block;
+        text-align: left;
     }
 }
 
@@ -882,7 +875,7 @@
 @media (min-width: 992px) {
     .swagger-section .operations h4 {
         box-shadow: none;
-        cursor: default
+        cursor: pointer
     }
 }
 
