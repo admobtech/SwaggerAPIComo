@@ -186,7 +186,7 @@
 .swagger-section .action-summary {
     margin: 0;
     padding: 20px;
-    color: #838991
+    color: #4A4A4B
 }
 
 .swagger-section .operation.get .http_method a, .swagger-section .operation.get .http_method span {
