@@ -94,7 +94,7 @@
                     addApiKeyAuthorization();
                 },
                 onFailure: function (data) {
-                    log("Unable to Load SwaggerUI");
+                    log("Unable to Load SwaggerUI, Invalid Json format");
                 },
                 //Start Request in body, addition configurations.
                 docExpansion: "none",
@@ -102,10 +102,12 @@
                 jsonEditor: true,
                 jsonEditorOptions: {
                     defaultModelRendering: 'schema',
+                    defaultValue: true,
                     showRequestHeaders: true,
                     disableProperties:true,
                     disableEditJson:false,
                     removeEmptyProperties:true
+                    //noDefaultProperties:false
                 }
 
                 //End Request in body, addition configurations.
