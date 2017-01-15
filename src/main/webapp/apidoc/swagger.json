@@ -3,7 +3,7 @@
   "info": {
     "title": "Como API Documentation",
     "description": "API Calls and Specification.",
-    "version": "2.7.3",
+    "version": "2.7.4",
     "termsOfService": "https://apidoc-dot-zipory-alpha.appspot.com/apidoc/",
     "license": {
       "name": "Apache 2.0",
@@ -52,7 +52,6 @@
         "parameters": [{
           "in": "body",
           "name": "Request",
-          "required": false,
           "schema": {
             "$ref": "#/definitions/GetMemberDetailsRequest"
           }
@@ -452,15 +451,20 @@
           "type": "boolean",
           "description": "If true all RedeemItems as used will be marked as used. When false the Redeem API call will not mark the RedeemItems as used."
         },
-        "ReturnExtendedItems": {
+        "ReturnExtendedItems":{
           "type": "boolean",
-          "description": "Show items with dependencies on other items on the purchase. Setting this property as true will change the format of the response to show item dependencies."
+          "description": "Shows items with dependencies on other items in the purchase. Setting this property as true will change the format of the response to show item dependencies(default is false)."
+        },
+        "ReturnExtendedDiscountBy": {
+          "type": "boolean",
+          "description": "Shows how Discounts should be allocated to specific items in the purchase (default is “None”)."
         }
       }
     },
     "RedeemItem": {
-      "type": "object",
+      "type": "list",
       "properties": {
+        "type": "object",
         "RedeemCode": {
           "type": "string",
           "description": "A code given by the customer to the POS."
@@ -519,13 +523,21 @@
         "TimeStamp": {
           "type": "string",
           "format": "date",
-          "description": "Transaction time or time of purchase, Required field *"
+          "description": "Transaction time or time of purchase, Required field (UNIX Timestamp) *"
         },
         "TotalSum": {
           "type": "integer",
           "minimum": 1,
           "exclusiveMinimum": true,
           "description": "Total amount paid in cents, Required field *"
+        },
+        "TotalGeneralDiscount": {
+          "type": "integer",
+          "description": "Total amount in cents of all discounts that weren’t apportioned to particular items (including Como discounts and other discounts)."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Indicates whether the transaction was finalized (status = 'Final') or not (status = 'Open') Note: Default is 'Final'."
         },
         "Tags": {
           "type": "string",
@@ -542,6 +554,14 @@
         "TransactionSource": {
           "type": "string",
           "description": "The origin of the transaction: e.g. POS, Website, App."
+        },
+        "TransactionSourceName": {
+          "type": "string",
+          "value": "Como API Test",
+          "enum": [
+            "Como API Test"
+          ],
+          "description": "POS Name"
         },
         "ChainID": {
           "type": "string",
@@ -564,6 +584,12 @@
             "$ref": "#/definitions/Item"
           }
         },
+        "Payments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Payment"
+          }
+        },
         "PosID": {
           "type": "string",
           "description": "Transmitting POS identifier in the branch, NOT required field"
@@ -579,7 +605,7 @@
         "TimeStamp": {
           "type": "string",
           "format": "date",
-          "description": "Transaction time or time of purchase, Required field *"
+          "description": "Transaction time or time of purchase, Required field (UNIX Timestamp) *"
         },
         "TotalSum": {
           "type": "integer",
@@ -587,9 +613,17 @@
           "exclusiveMinimum": true,
           "description": "Total amount paid in cents, Required field *"
         },
+        "TotalGeneralDiscount": {
+          "type": "integer",
+          "description": "Total amount in cents of all discounts that weren’t apportioned to particular items (including Como discounts and other discounts)."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Indicates whether the transaction was finalized (status = 'Final') or not (status = 'Open') Note: Default is 'Final'."
+        },
         "Tags": {
           "type": "string",
-          "description": "Array of strings. Includes optional tags that are available to the business; that are relevant for the specific item."
+          "description": "Array of strings, Includes optional tags that are available to the business."
         },
         "Cashier": {
           "type": "string",
@@ -602,6 +636,14 @@
         "TransactionSource": {
           "type": "string",
           "description": "The origin of the transaction: e.g. POS, Website, App."
+        },
+        "TransactionSourceName": {
+          "type": "string",
+          "value": "Como API Test",
+          "enum": [
+            "Como API Test"
+          ],
+          "description": "POS Name"
         },
         "ChainID": {
           "type": "string",
@@ -625,6 +667,10 @@
           "type": "string",
           "description": "Human readable item name."
         },
+        "LineID": {
+          "type": "string",
+          "description": "Line reference number corresponding to the line item."
+        },
         "DepartmentCode": {
           "type": "string",
           "description": "Department or other relevant hierarchy information."
@@ -642,6 +688,16 @@
           "format": "double",
           "description": "Amount of the current item. Used for weighable items etc. If the item is weighable the Quantity must be 1."
         },
+        "GrossPrice": {
+          "type": "number",
+          "format": "integer",
+          "description": "Price of the item before it’s discounted (i.e. catalog price of the item) calculated based on quantity and amount: GrossPrice = (gross price per item) x (Quantity or Amount)."
+        },
+        "TotalDiscount": {
+          "type": "number",
+          "format": "integer",
+          "description": "Total discount applied to this particular item by the POS - including both Como discounts and other discounts."
+        },
         "Price": {
           "type": "string",
           "description": "Price of the item with quantity and amount taken in to consideration paid in cents."
@@ -653,6 +709,11 @@
         "Cashier": {
           "type": "string",
           "description": "Information about the current transaction operator."
+        },
+        "UsedBudget": {
+          "type": "number",
+          "format": "integer",
+          "description": "Total amount of budget or points used to discount the item."
         }
       }
     },
