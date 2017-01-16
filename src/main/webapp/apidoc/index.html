@@ -98,7 +98,7 @@
                 },
                 //Start Request in body, addition configurations.
                 docExpansion: "none",
-                sorter: "alpha",
+                //sorter: "alpha",
                 jsonEditor: true,
                 jsonEditorOptions: {
                     defaultModelRendering: 'schema',
@@ -109,10 +109,8 @@
                     removeEmptyProperties:true
                     //noDefaultProperties:false
                 }
-
                 //End Request in body, addition configurations.
             });
-
             function addApiKeyAuthorization() {
                 var key = encodeURIComponent($('#input_apiKey')[0].value);
                 if (key && key.trim() != "") {
