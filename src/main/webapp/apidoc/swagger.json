@@ -451,20 +451,19 @@
           "type": "boolean",
           "description": "If true all RedeemItems as used will be marked as used. When false the Redeem API call will not mark the RedeemItems as used."
         },
-        "ReturnExtendedItems":{
+        "ReturnExtendedItems": {
           "type": "boolean",
           "description": "Shows items with dependencies on other items in the purchase. Setting this property as true will change the format of the response to show item dependencies(default is false)."
         },
         "ReturnExtendedDiscountBy": {
           "type": "boolean",
-          "description": "Shows how Discounts should be allocated to specific items in the purchase (default is “None”)."
+          "description": "Shows how Discounts should be allocated to specific items in the purchase (default is 'None')."
         }
       }
     },
     "RedeemItem": {
-      "type": "list",
+      "type": "object",
       "properties": {
-        "type": "object",
         "RedeemCode": {
           "type": "string",
           "description": "A code given by the customer to the POS."
