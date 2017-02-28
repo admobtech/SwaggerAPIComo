@@ -3,7 +3,7 @@
   "info": {
     "title": "Como API Documentation",
     "description": "API Calls and Specification.",
-    "version": "2.7.4",
+    "version": "2.7.8",
     "termsOfService": "https://apidoc-dot-zipory-alpha.appspot.com/apidoc/",
     "license": {
       "name": "Apache 2.0",
@@ -456,7 +456,12 @@
           "description": "Shows items with dependencies on other items in the purchase. Setting this property as true will change the format of the response to show item dependencies(default is false)."
         },
         "ReturnExtendedDiscountBy": {
-          "type": "boolean",
+          "type": "string",
+          "value": "None",
+          "enum": [
+            "None",
+            "Discount"
+          ],
           "description": "Shows how Discounts should be allocated to specific items in the purchase (default is 'None')."
         }
       }
@@ -647,6 +652,15 @@
         "ChainID": {
           "type": "string",
           "description": "Used to distinguish business when multiple business are using the same ApiKey."
+        },
+        "ReturnExtendedDiscountBy": {
+          "type": "string",
+          "value": "None",
+          "enum": [
+            "None",
+            "Discount"
+          ],
+          "description": "Shows how Discounts should be allocated to specific items in the purchase (default is 'None')."
         }
       }
     },
