@@ -613,8 +613,6 @@
         },
         "TotalSum": {
           "type": "integer",
-          "minimum": 1,
-          "exclusiveMinimum": true,
           "description": "Total amount paid in cents, Required field *"
         },
         "TotalGeneralDiscount": {
@@ -712,7 +710,8 @@
           "description": "Total discount applied to this particular item by the POS - including both Como discounts and other discounts."
         },
         "Price": {
-          "type": "string",
+          "type": "number",
+          "format": "integer",
           "description": "Price of the item with quantity and amount taken in to consideration paid in cents."
         },
         "Tags": {
