@@ -447,6 +447,10 @@
           "type": "integer",
           "description": "The requested amount to pay in cents. Can be negative to reimburse customer.(Required*)"
         },
+        "BranchID": {
+          "type": "string",
+          "description": "Transmitting branch identifier (Optional field)"
+        },
         "MarkAsUsed": {
           "type": "boolean",
           "description": "If true all RedeemItems as used will be marked as used. When false the Redeem API call will not mark the RedeemItems as used."
