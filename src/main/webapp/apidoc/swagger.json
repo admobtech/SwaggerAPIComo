@@ -459,6 +459,11 @@
           "type": "boolean",
           "description": "Shows items with dependencies on other items in the purchase. Setting this property as true will change the format of the response to show item dependencies(default is false)."
         },
+        "DetailedRedeemResponse": {
+          "type": "boolean",
+          "value": "true",
+          "description": "Shows errors with fully details."
+        },
         "ReturnExtendedDiscountBy": {
           "type": "string",
           "value": "None",
