@@ -1,0 +1,1312 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Como API Documentation",
+    "description": "API Calls and Specification.",
+    "version": "2.8.0",
+    "termsOfService": "https://apidoc-dot-zipory-alpha.appspot.com/apidoc/",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "api-dot-zipory-alpha.appspot.com",
+  "basePath": "/alpha/api",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/Info": {
+      "get": {
+        "summary": "General Information",
+        "description": "This document describes the Como API for external services that wish to integrate with the Como customer management solution. While most of the document uses a POS semantic, all API calls can be made from any kind of service with web access including POS&rsquo;s, e-commerce sites, vending machines, gas station pumps, etc.<br><big><br>Identification &amp; Protocol</big><br>The Como API is based on simple HTTP POST requests over HTTPS. Identification is performed using a secret API key which is provided to the business upon registering to the Como platform.<br><br><big>Como API Servers</big><br>Host: https://api-dot-zipory-alpha.appspot.com<br>api-key: provided by the business (use 123454321 for the development stage)<br><br>Note: When a static IP is mandatory, use the following host: https://api.keeprz.com<br><br><big>Using HTTP Instead of HTTPS</big><br>When HTTPS is not possible, you can use HTTP with a pre-shared encryption key. The encryption is only used for requests. Responses will be returned without encryption.<br>When using HTTP change path of the API from alpha/api/&hellip; to alpha/enc-api/&hellip;<br>To encrypt the request data:<br><br>1. Hash the raw encryption key with SHA1.<br>2. Use the hashed key to create an AES encryption key.<br>3. Encode the request data as base64 string and encrypt with AES/ECB/PKCS5 Padding transformation.<br>4. Create the request with the encrypted data in a property called 'data'<br><br><big>API Configurations</big><br>The following parameters should be auto filled but editable:<br><br>Server host (https://api-dot-zipory-alpha.appspot.com) in case a custom host needs be used to support custom features for the business<br>Api-key (ID of a live business)<br>BranchID (ID of the branch that the POS is in)&mdash;even if the POS manages these IDs, it should be editable in case a business&rsquo; branches use different POS companies that use overlapping branch IDs and they need to override the IDs of one POS company<br><big><br>Request Format</big><br>The POST body is a UTF-8 encoded object. The URL for the request should be built as follows:<br>1. API server host<br>2. Prefix path (alpha/api/ for HTTPS or alpha/enc-api/ for HTTP) followed by the name of the API call<br>3. Path params: MimeType=application/json, InputType=Json, api-key=XXXXXX<br><br><big>Response Format (error handling)</big><br>The response is a simple JSON object. The 'Result' attribute returned in this object indicates success ('Y') or failure ('N'). <br>In case of failure, the response body will contain additional information which you can inspect for debugging and error handling.",
+        "tags": [
+          "Como API"
+        ]
+      }
+    },
+    "/GetMemberDetails": {
+      "post": {
+        "summary": "Get Member Details",
+        "description": "This API call is used to verify the customer is a club member, receive membership details (name, point balance, etc.) and receive asset details. <br><br>The response will return a list of Club Member objects or an error if the identifying customer is not club member. With this API call, the POS can enable Redeem via POS to allow assets to be redeemed directly from the POS. <br><br>When to use: <br>&bull;&nbsp;&nbsp; &nbsp;At the start of the transaction to verify the customer is a club member and display details<br>&bull;&nbsp;&nbsp; &nbsp;When requested to display or redeem the assets of a club member (see Redeem via POS).",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetMemberDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "schema": {
+            "$ref": "#/definitions/GetMemberDetailsRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "default": "application/json",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "default": "json",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "/GetMemberBenefits": {
+      "post": {
+        "summary": "Get Member Benefits",
+        "description": "This API call is used to apply club deals to the member&rsquo;s purchase&mdash;benefits that all members receive just for being club members. For example, it can be a 10% discount on the purchase or $5 off specific items. The Benefits returned from this call are not for one-time use.<br><br>When to use: <br>&bull;&nbsp;&nbsp; &nbsp;After a member identifies<br>&bull;&nbsp;&nbsp; &nbsp;When a cashier taps to print the check (e.g. bill in a restaurant)<br>&bull;&nbsp;&nbsp; &nbsp;At the final checkout when the cashier taps to continue to the payment page<br>Notes:<br>&bull;&nbsp;&nbsp; &nbsp;Benefits returned from this call may take into account the contents of the shopping cart. Therefore, it is advisable to perform this request when the shopping cart is finalized just before closing the purchase, and optionally when the cart is changed or upon explicit request by the cashier.<br>&bull;&nbsp;&nbsp; &nbsp;If GetMemberBenefits is called multiple times, make sure you clear the previously returned benefits and add the new benefits each time. However, if the POS cannot delete items from the shopping cart, it should only be called at the end.<br><br>Request Format <br><br>Note: The GetMemberBenefits API call should send all the fields of the SubmitPurchase API call. Como needs the purchase details in order to validate benefits that are defined in our system (e.g. Discounts)",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetMemberBenefitsResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/GetMemberBenefitsRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "/Redeem": {
+      "post": {
+        "summary": "Redeem",
+        "description": "This API call allows members to redeem an asset (gift or punch card) to receive some type of benefit. For example, they could receive a free coffee or $5 off their purchase.<br> The asset the member wants to redeem is referenced in the request by RedeemItems and the response returns Benefits corresponding to this asset. RedeemItems can be sent as either:<br><br>&bull;&nbsp;&nbsp;RedeemCodes &ndash; that a member generates from their app (as a number, QR or barcode)<br>&bull;&nbsp;&nbsp;AssetKeys &ndash; that are acquired from the GetMemberDetails call (see Redeem via POS)<br><br>Note: Each RedeemItem should include either RedeemCodes or AssetKeys but not both. In addition, a new Redeem call should be sent for each asset tha tis redeemed. Customers should only be able to redeem each asset once. So when they receive the benefit, the RedeemItem should be marked as 'used' to prevent it from being re-used in future Redeem calls. It can be marked as used in two ways:<br>&bull;&nbsp;&nbsp;Using the Redeem call by passing the MarkAsUsed flag as true (or if the business selects to mark it as used from the management console)<br>&bull;&nbsp;&nbsp;Using the SubmitPurchase call by passing the RedeemItem<br><br>Note: If the Redeem call doesn't mark the RedeemItem as used, a member can try to redeem the same asset in a different transaction (before SubmitPurchase is sent for the first). To prevent the RedeemItem from being sent again, a lock is implemented using the BranchID, PosID and TransactionID (if provided). The lock will be active for a limited time frame, set by the business in the management console.<br>&bull;&nbsp;&nbsp;Request Format<br><br>Note: The Redeem API call should send all the fields of the SubmitPurchase API call. Como needs the purchase details in order to validate benefits that are defined in our system (as Discounts).",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/RedeemItemsResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "RedeemCodes will be provided by the customer(as a code/QR/barcode provided by the app)",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/RedeemRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "/SubmitPurchase": {
+      "post": {
+        "summary": "Submit Purchase",
+        "description": "Once the transaction is completed, this API call is used to send Como a club member’s purchase details-such as the total amount paid and the complete shopping cart. These purchase details are used by Como to segment members or perform actions on them-such as automatically punch their punch cards (based on specific items in the cart), give them points or send them other rewards.<br><br>When to use:<br> After the final payment.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/SubmitPurchaseResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "SubmitPurchase",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/SubmitPurchaseRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "default": "application/json",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "default": "json",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "/CancelPurchase": {
+      "post": {
+        "summary": "Cancel Purchase",
+        "description": "This API call allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call.<br> <br> Notes:<br>&bull;&nbsp;&nbsp;If a member pays for their purchases using the PayWithBudget call and then cancels their purchase using the CancelPurchase call, the CancelBudgetPayment call should also be sent to cancel the budget payment.<br>&bull;&nbsp;&nbsp;In the management console, a business can configure the following settings:<br>&bull;&nbsp;&nbsp;a 'cancellation window' a time period in which the CancelPurchase call can be sent<br>&bull;&nbsp;&nbsp;whether or not the CancelPurchase call can be sent outside of this window",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/CancelPurchaseResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "Allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call.",
+          "schema": {
+            "$ref": "#/definitions/CancelPurchaseRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "/PayWithBudget": {
+      "post": {
+        "summary": "Pay With Budget",
+        "description": "This API call allows customers to pay for their purchase using their budget, points, gift card or mobile payments.<br><br>The business can secure these payments by requiring members to provide a verification code at the POS. Through the management console, the business can configure the following settings:<br>&bull;&nbsp;&nbsp; &nbsp;whether or not to require a verification code<br>&bull;&nbsp;&nbsp; &nbsp;whether to send members this code by SMS or allow them to generate the code from the app<br><br>Note: To send the code by SMS: PayWithBudget is first sent without a verification code. When the payment request fails, Como automatically sends a code to the member&rsquo;s device. This code can then be used to send a successful PayWithBudget call.<br>&bull;&nbsp;&nbsp; &nbsp;whether or not to allow customers to pay using a verification code, without identifying<br> &bull;&nbsp;&nbsp; &nbsp;whether or not to allow members to pay without a verification code when they identify with an AppClientID<br><br>Note: To support any settings selected by the business, the POS must present a UI that supports all options in the API including the text box for verification code input.<br><br>Unlike budget/point/mobile payments, gift card payments can be made by non-members. In this case, the gift card number is entered as the verification code.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/PayWithBudgetResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "The verification code will be provided by the member (from the app, SMS, etc.)",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/PayWithBudgetRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "/CancelBudgetPayment": {
+      "post": {
+        "summary": "Cancel Budget Payment",
+        "description": "This API call allows the POS to cancel a budget/point/gift card/mobile payment using the payment UID code from the PayWithBudget call.<br><br>Note:<br>When the CancelBudgetPayment is sent after the purchase is completed, the CancelPurchase call should also be sent to ensure the purchase is also cancelled (in addition to the budget/point/gift card/mobile payment).",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/CancelBudgetPaymentResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Como API"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "Cancel Budget Payment",
+          "schema": {
+            "$ref": "#/definitions/CancelBudgetPaymentRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    },
+    "parameters": [{
+      "in": "body",
+      "name": "Request",
+      "description": "Allows the POS to cancel a transaction using the confirmation code from the SubmitPurchase call.",
+      "schema": {
+        "$ref": "#/definitions/CancelPurchaseRequest"
+      }
+    }, {
+      "name": "MimeType",
+      "in": "query",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "application/json"
+      ]
+    }, {
+      "name": "InputType",
+      "in": "query",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "json"
+      ]
+    }],
+    "/SubmitEvent": {
+      "post": {
+        "summary": "Submit Event",
+        "description": "This API call allows Como to receive information about external events that occurred to specific club members. <br>Based on this information, Como can segment members and automatically perform certain actions on them (like send them a special coupon or a push notification).",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/SubmitEventResponse"
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        },
+        "tags": [
+          "Future Feature"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "Request",
+          "description": "The verification code will be provided by the member (from the app, SMS, etc.)",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/SubmitEventRequest"
+          }
+        }, {
+          "name": "MimeType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "application/json"
+          ]
+        }, {
+          "name": "InputType",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        }]
+      }
+    }
+  },
+  "definitions": {
+    "RedeemRequest": {
+      "type": "object",
+      "required": [
+        "TotalSum"
+      ],
+      "properties": {
+        "RedeemItems": {
+          "type": "array",
+          "description": "An array of the gifts RedeemItems that the member requested to redeem for the current API call. If a RedeemItem was used successfully calling the Redeem API with that item should not be permitted in the same transaction.",
+          "items": {
+            "$ref": "#/definitions/RedeemItem"
+          }
+        },
+        "Customers": {
+          "type": "array",
+          "description": "A general purpose array of member identifiers. Identifiers: PhoneNumber/MemberID/GovID/AppClientID",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "TotalSum": {
+          "type": "integer",
+          "description": "The requested amount to pay in cents. Can be negative to reimburse customer.(Required*)"
+        },
+        "BranchID": {
+          "type": "string",
+          "description": "Transmitting branch identifier (Optional field)"
+        },
+        "MarkAsUsed": {
+          "type": "boolean",
+          "description": "If true all RedeemItems as used will be marked as used. When false the Redeem API call will not mark the RedeemItems as used."
+        },
+        "ReturnExtendedItems": {
+          "type": "boolean",
+          "description": "Shows items with dependencies on other items in the purchase. Setting this property as true will change the format of the response to show item dependencies(default is false)."
+        },
+        "DetailedRedeemResponse": {
+          "type": "boolean",
+          "value": "true",
+          "description": "Shows errors with fully details."
+        },
+        "ReturnExtendedDiscountBy": {
+          "type": "string",
+          "value": "None",
+          "enum": [
+            "None",
+            "Discount"
+          ],
+          "description": "Shows how Discounts should be allocated to specific items in the purchase (default is 'None')."
+        }
+      }
+    },
+    "RedeemItem": {
+      "type": "object",
+      "properties": {
+        "RedeemCode": {
+          "type": "string",
+          "description": "A code given by the customer to the POS."
+        },
+        "AssetKey": {
+          "type": "string",
+          "description": "The asset key as provided by the POS from the 'GetMemberDetails' API call response."
+        }
+      }
+    },
+    "SubmitPurchaseRequest": {
+      "type": "object",
+      "required": [
+        "BranchID",
+        "TransactionID",
+        "TimeStamp",
+        "TotalSum"
+      ],
+      "properties": {
+        "Customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "RedeemItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RedeemItem"
+          }
+        },
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "Payments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Payment"
+          }
+        },
+        "PosID": {
+          "type": "string",
+          "description": "Transmitting POS identifier in the branch, NOT required field"
+        },
+        "BranchID": {
+          "type": "string",
+          "description": "Transmitting branch identifier, Required field *"
+        },
+        "TransactionID": {
+          "type": "string",
+          "description": "Transaction id from the POS, Required field *"
+        },
+        "TimeStamp": {
+          "type": "string",
+          "format": "date",
+          "description": "Transaction time or time of purchase, Required field (UNIX Timestamp) *"
+        },
+        "TotalSum": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMinimum": true,
+          "description": "Total amount paid in cents, Required field *"
+        },
+        "TotalGeneralDiscount": {
+          "type": "integer",
+          "description": "Total amount in cents of all discounts that weren’t apportioned to particular items (including Como discounts and other discounts)."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Indicates whether the transaction was finalized (status = 'Final') or not (status = 'Open') Note: Default is 'Final'."
+        },
+        "Tags": {
+          "type": "string",
+          "description": "Array of strings, Includes optional tags that are available to the business."
+        },
+        "Cashier": {
+          "type": "string",
+          "description": "Information about the current transaction operator."
+        },
+        "OrderType": {
+          "type": "string",
+          "description": "The order type of the transaction: Takeaway/DineIn/Delivery."
+        },
+        "TransactionSource": {
+          "type": "string",
+          "description": "The origin of the transaction: e.g. POS, Website, App."
+        },
+        "TransactionSourceName": {
+          "type": "string",
+          "value": "Como API Test",
+          "enum": [
+            "Como API Test"
+          ],
+          "description": "POS Name"
+        },
+        "ChainID": {
+          "type": "string",
+          "description": "Used to distinguish business when multiple business are using the same ApiKey."
+        }
+      }
+    },
+    "GetMemberBenefitsRequest": {
+      "type": "object",
+      "properties": {
+        "Customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "Payments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Payment"
+          }
+        },
+        "PosID": {
+          "type": "string",
+          "description": "Transmitting POS identifier in the branch, NOT required field"
+        },
+        "BranchID": {
+          "type": "string",
+          "description": "Transmitting branch identifier, Required field *"
+        },
+        "TransactionID": {
+          "type": "string",
+          "description": "Transaction id from the POS, Required field *"
+        },
+        "TimeStamp": {
+          "type": "string",
+          "format": "date",
+          "description": "Transaction time or time of purchase, Required field (UNIX Timestamp) *"
+        },
+        "TotalSum": {
+          "type": "integer",
+          "description": "Total amount paid in cents, Required field *"
+        },
+        "TotalGeneralDiscount": {
+          "type": "integer",
+          "description": "Total amount in cents of all discounts that weren’t apportioned to particular items (including Como discounts and other discounts)."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Indicates whether the transaction was finalized (status = 'Final') or not (status = 'Open') Note: Default is 'Final'."
+        },
+        "Tags": {
+          "type": "string",
+          "description": "Array of strings, Includes optional tags that are available to the business."
+        },
+        "Cashier": {
+          "type": "string",
+          "description": "Information about the current transaction operator."
+        },
+        "OrderType": {
+          "type": "string",
+          "description": "The order type of the transaction: Takeaway/DineIn/Delivery."
+        },
+        "TransactionSource": {
+          "type": "string",
+          "description": "The origin of the transaction: e.g. POS, Website, App."
+        },
+        "TransactionSourceName": {
+          "type": "string",
+          "value": "Como API Test",
+          "enum": [
+            "Como API Test"
+          ],
+          "description": "POS Name"
+        },
+        "ChainID": {
+          "type": "string",
+          "description": "Used to distinguish business when multiple business are using the same ApiKey."
+        },
+        "ReturnExtendedDiscountBy": {
+          "type": "string",
+          "value": "None",
+          "enum": [
+            "None",
+            "Discount"
+          ],
+          "description": "Shows how Discounts should be allocated to specific items in the purchase (default is 'None')."
+        }
+      }
+    },
+    "Item": {
+      "type": "object",
+      "required": [
+        "ItemCode",
+        "Quantity",
+        "Price"
+      ],
+      "properties": {
+        "ItemCode": {
+          "type": "string",
+          "description": "Item identification code."
+        },
+        "ItemName": {
+          "type": "string",
+          "description": "Human readable item name."
+        },
+        "LineID": {
+          "type": "string",
+          "description": "Line reference number corresponding to the line item."
+        },
+        "DepartmentCode": {
+          "type": "string",
+          "description": "Department or other relevant hierarchy information."
+        },
+        "DepartmentName": {
+          "type": "string",
+          "description": "Human readable hierarchy information."
+        },
+        "Quantity": {
+          "type": "integer",
+          "description": "Number of items purchased from the current item."
+        },
+        "Amount": {
+          "type": "number",
+          "format": "double",
+          "description": "Amount of the current item. Used for weighable items etc. If the item is weighable the Quantity must be 1."
+        },
+        "GrossPrice": {
+          "type": "number",
+          "format": "integer",
+          "description": "Price of the item before it’s discounted (i.e. catalog price of the item) calculated based on quantity and amount: GrossPrice = (gross price per item) x (Quantity or Amount)."
+        },
+        "TotalDiscount": {
+          "type": "number",
+          "format": "integer",
+          "description": "Total discount applied to this particular item by the POS - including both Como discounts and other discounts."
+        },
+        "Price": {
+          "type": "number",
+          "format": "integer",
+          "description": "Price of the item with quantity and amount taken in to consideration paid in cents."
+        },
+        "Tags": {
+          "type": "string",
+          "description": "Array of strings. Includes optional tags that are available to the business; that are relevant for the specific item."
+        },
+        "Cashier": {
+          "type": "string",
+          "description": "Information about the current transaction operator."
+        },
+        "UsedBudget": {
+          "type": "number",
+          "format": "integer",
+          "description": "Total amount of budget or points used to discount the item."
+        }
+      }
+    },
+    "Payment": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "string",
+          "description": "The type of the payment as one of the following; 'cash', 'credit_card', 'debit_card', 'club_budget', 'voucher', 'coupon', 'cheque', 'pre_paid', 'debt' For other types please contact us."
+        },
+        "Details": {
+          "type": "string",
+          "description": "Additional information. i.e. – last 4 digits of credit card, the payment confirmation number."
+        },
+        "Sum": {
+          "type": "string",
+          "description": "Sum of the payment in cents."
+        }
+      }
+    },
+    "GetMemberDetailsRequest": {
+      "type": "object",
+      "properties": {
+        "Customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "ExpandAssets": {
+          "type": "boolean",
+          "default": "true",
+          "description": "Get the Assets of the customer. The assets can then be converted to RedeemItems and allow the POS to get Benefits with the Redeem API call."
+        },
+        "TestRedeemConditions": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Adds the 'Redeemable' flag to the Assets. Indicating that the asset is currently in a redeemable state."
+        },
+        "IncludeArchivedAssets": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Show Assets(gifts) that the client has redeemed or marked as archived."
+        }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "properties":{
+        "PhoneNumber": {
+          "type": "string",
+          "uniqueItems": true,
+          "description": "Customer phone number."
+        },
+        "GovID": {
+          "type": "string",
+          "uniqueItems": true,
+          "description": "The locally relevant government issued ID number, driver license etc."
+        },
+        "MemberID": {
+          "type": "string",
+          "uniqueItems": true,
+          "description": "An external number representing the customer like physical card number etc."
+        },
+        "AppClientID": {
+          "type": "string",
+          "uniqueItems": true,
+          "description": "A temporary/permanent customer ID that the app generates. If QR code scanning is available the app can present a QR image for the POS to scan."
+        }
+      }
+    },
+    "GetMemberDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        },
+        "Membership": {
+          "type": "array",
+          "description": "An array of Club Member objects.",
+          "items": {
+            "$ref": "#/definitions/ClubMember"
+          }
+        }
+      }
+    },
+    "ClubMember": {
+      "type": "object",
+      "properties": {
+        "FirstName": {
+          "type": "string",
+          "description": "First name of the member."
+        },
+        "LastName": {
+          "type": "string",
+          "description": "Last name of the member."
+        },
+        "PushNotificationEnabled": {
+          "type": "boolean",
+          "description": "The member enabled push notification in the app."
+        },
+        "LocationEnabled": {
+          "type": "boolean",
+          "description": "The member enabled location for the app."
+        },
+        "MobileAppUsed": {
+          "type": "boolean",
+          "description": "Member used mobile app."
+        },
+        "MobileAppUsedLastDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Last login from the mobile app."
+        },
+        "PhoneNumber": {
+          "type": "string",
+          "description": "Member phone number."
+        },
+        "AllowSMS": {
+          "type": "boolean",
+          "description": "The member enabled SMS from Como."
+        },
+        "GovID": {
+          "type": "string",
+          "description": "The locally relevant government issued ID number."
+        },
+        "Email": {
+          "type": "string",
+          "description": "Member Email."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Member Como status i.e. deleted."
+        },
+        "MemberID": {
+          "type": "string",
+          "description": "An external number representing the member."
+        },
+        "LocationID": {
+          "type": "string",
+          "description": "The id of the business that the member is in."
+        },
+        "Points": {
+          "type": "integer",
+          "description": "Amount of points that the member has. The points are weighted and are treated like a budget."
+        },
+        "AccumulatedPoints": {
+          "type": "integer",
+          "description": "A secondary point measurement representing points without weight but are accumulated."
+        },
+        "UnweightedBudgetPoints": {
+          "type": "integer",
+          "description": "A secondary point measurement representing points without weight and not accumulating."
+        },
+        "WeightedPoints": {
+          "type": "integer",
+          "description": "A secondary point measurement representing points with weight and accumulating."
+        },
+        "Birthday": {
+          "type": "string",
+          "format": "date",
+          "description": "Member birthday."
+        },
+        "Anniversary": {
+          "type": "string",
+          "format": "date",
+          "description": "Member anniversary."
+        },
+        "Gender": {
+          "type": "string",
+          "description": "Member gender as defined by the business. Note that this field can change from business to business."
+        },
+        "GenericString1": {
+          "type": "string",
+          "description": "A general purpose string variable."
+        },
+        "GenericInteger1": {
+          "type": "integer",
+          "description": "A general purpose integer variable."
+        },
+        "GenericCheckBox1": {
+          "type": "boolean",
+          "description": "A general purpose boolean variable."
+        },
+        "GenericDate1": {
+          "type": "string",
+          "description": "A general purpose date variable."
+        },
+        "Tag": {
+          "type": "string",
+          "description": "Business tags that provide additional information on the member."
+        },
+        "Assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Assets"
+          },
+          "description": "An array of assets(gifts) of the member. Present only if customer ask to ExpandAssets."
+        }
+      }
+    },
+    "Assets": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string",
+          "description": "Name of the benefit."
+        },
+        "Status": {
+          "type": "string",
+          "description": "The value can be; Pending /Assigned – the benefit is ready to be redeemed Redeemed – the benefit has been redeemed."
+        },
+        "Description": {
+          "type": "string",
+          "description": "A short detailed message of the benefit."
+        },
+        "Key": {
+          "type": "string",
+          "description": "The AssetKey of the benefit."
+        },
+        "ValidUntil": {
+          "type": "string",
+          "format": "date",
+          "description": "Expiration date of the benefit."
+        },
+        "Redeemable": {
+          "type": "boolean",
+          "description": "Show if benefit can be redeemed."
+        },
+        "Archived": {
+          "type": "boolean",
+          "description": "Indicate if benefit is archived by; using/ expiration date/ user action."
+        }
+      }
+    },
+    "GetMemberBenefitsResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        },
+        "OptionalBenefits": {
+          "type": "array",
+          "description": "An array of optional benefits.",
+          "items": {
+            "$ref": "#/definitions/OptionalBenefit"
+          }
+        }
+      },
+      "allOf": [{
+        "$ref": "#/definitions/Benefit"
+      }]
+    },
+    "Benefit": {
+      "type": "object",
+      "properties": {
+        "ItemCodes": {
+          "type": "array",
+          "description": "An array of POS Item codes that should be added to the purchase.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "DealCodes": {
+          "type": "array",
+          "description": "An array of POS codes that have complex behavior, i.e. promotion triggers, discounts etc.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Discounts": {
+          "type": "array",
+          "description": "An array of discounts.",
+          "items": {
+            "$ref": "#/definitions/Discount"
+          }
+        }
+      }
+    },
+    "OptionalBenefit": {
+      "type": "object",
+      "description": "An array of optional benefits.",
+      "required": [
+        "MultiSelectMax",
+        "Options"
+      ],
+      "properties": {
+        "MultiSelectMax": {
+          "type": "integer",
+          "description": "The max number of options that the user can select."
+        },
+        "Options": {
+          "$ref": "#/definitions/Benefit"
+        }
+      }
+    },
+    "Discount": {
+      "type": "object",
+      "required": [
+        "Description",
+        "Sum"
+      ],
+      "properties": {
+        "Description": {
+          "type": "string",
+          "description": "Human readable description of the discount."
+        },
+        "Sum": {
+          "type": "integer",
+          "description": "Sum of the discount in cents. The sum should be inserted as is (no sign changes are needed)."
+        }
+      }
+    },
+    "RedeemItemsResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        },
+        "OptionalBenefits": {
+          "type": "array",
+          "description": "An array of optional benefits.",
+          "items": {
+            "$ref": "#/definitions/OptionalBenefit"
+          }
+        }
+      },
+      "allOf": [{
+        "$ref": "#/definitions/GetMemberBenefitsResponse"
+      }]
+    },
+    "SubmitPurchaseResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Inner status of the transaction."
+        },
+        "Confirmation": {
+          "type": "string",
+          "description": "The confirmation code provided by the SubmitPurchase function."
+        },
+        "ExpectedTotalSum": {
+          "type": "string",
+          "description": "The total sum as indicated by the items rows. Should be identical to the TotalSum - Can be used to identify problems."
+        }
+      }
+    },
+    "PayWithBudgetRequest": {
+      "type": "object",
+      "required": [
+        "BranchID",
+        "TransactionID",
+        "TimeStamp",
+        "TotalSum"
+      ],
+      "properties": {
+        "Customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "VerificationCode": {
+          "type": "string",
+          "description": "A verification code provided by the club member (generated by club app, sent by SMS, etc.)"
+        },
+        "TotalSum": {
+          "type": "integer",
+          "description": "The requested amount to pay in cents. Can be negative to reimburse customer."
+        },
+        "AllowPartialPayment": {
+          "type": "boolean",
+          "description": "In case the member budget is insufficient, should a partial payment be allowed."
+        },
+        "PosID": {
+          "type": "string",
+          "description": "Transmitting POS identifier in the branch."
+        },
+        "BranchID": {
+          "type": "string",
+          "description": "Transmitting branch identifier."
+        },
+        "TransactionID": {
+          "type": "string",
+          "description": "Transaction id from the POS."
+        },
+        "TimeStamp": {
+          "type": "string",
+          "format": "date",
+          "description": "Transaction time or time of purchase."
+        },
+        "Cashier": {
+          "type": "string",
+          "description": "Information about the current transaction operator."
+        }
+      }
+    },
+    "PayWithBudgetResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        },
+        "ActualCharge": {
+          "type": "integer",
+          "description": "The real payment amount."
+        },
+        "PaymentUID": {
+          "type": "string",
+          "description": "The Payment code provided by the PayWithBudget API call. Will be used for canceling the payment."
+        }
+      }
+    },
+    "CancelBudgetPaymentRequest": {
+      "type": "object",
+      "required": [
+        "PaymentUID"
+      ],
+      "properties": {
+        "PaymentUID": {
+          "type": "string",
+          "description": "The payment UID code provided by the PayWithBudget API call."
+        },
+        "VerificationCode": {
+          "type": "string",
+          "description": "A verification code provided by the club member (generated by club app, sent by SMS, etc.)"
+        }
+      }
+    },
+    "CancelBudgetPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        },
+        "NewPointsSet": {
+          "type": "array",
+          "description": "An array of optional benefits.",
+          "items": {
+            "$ref": "#/definitions/NewPointsSetObjects"
+          }
+        }
+      }
+    },
+    "NewPointsSetObjects": {
+      "type": "object",
+      "properties": {
+        "WeightedPoints": {
+          "type": "integer",
+          "description": "A secondary point measurement representing points with weight and accumulating."
+        },
+        "UnweightedBudgetPoints": {
+          "type": "integer",
+          "description": "A secondary point measurement representing points without weight and not accumulating."
+        },
+        "AccumulatedPoints": {
+          "type": "integer",
+          "description": "A secondary point measurement representing points without weight but are accumulated."
+        },
+        "Points": {
+          "type": "integer",
+          "description": "Amount of points that the member has. the points are weighted and are treated like a budget."
+        }
+      }
+    },
+    "CancelPurchaseRequest": {
+      "type": "object",
+      "required": [
+        "Confirmation"
+      ],
+      "properties": {
+        "Confirmation": {
+          "type": "string",
+          "description": "The confirmation code provided by the SubmitPurchase function."
+        }
+      }
+    },
+    "CancelPurchaseResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Indicate if the API call succeeded or failed."
+        }
+      }
+    },
+    "SubmitEventRequest": {
+      "type": "object",
+
+      "properties": {
+        "EventTime": {
+          "type": "string",
+          "format": "date",
+          "description": "Date and time the event occurred *"
+        },
+        "Customers": {
+          "type": "array",
+          "description":"A general purpose array of member identifiers*",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "Type": {
+          "type": "string",
+          "description": "Event type (e.g. Beacon signal) *"
+        },
+        "SubType": {
+          "type": "string",
+          "description": "Event subtype (e.g. Enter)"
+        },
+        "Tags": {
+          "type": "string",
+          "description": "Event tags (can be used to relate several events together)"
+        },
+        "Data": {
+          "type": "array",
+          "description":"A general purpose array of member identifiers*",
+          "items": {
+            "$ref": "#/definitions/Data"
+          }
+        }
+      }
+    },
+    "SubmitEventResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
+          "type": "string",
+          "description": "Result 'Y'/'N' Indicates if the API call succeeded or failed."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Inner status of the transaction."
+        },
+        "Token": {
+          "type": "string",
+          "description": "A unique identifier of the transaction."
+        }
+      }
+    },
+    "Data": {
+      "type": "object",
+      "properties": {
+        "StringValue": {
+          "type": "string",
+          "description": "Any string value."
+        },
+        "DateValue": {
+          "type": "string",
+          "format": "date",
+          "description": "A date value in UNIX Timestamp format."
+        },
+        "NumericValue": {
+          "type": "number",
+          "format":"double",
+          "description": "Any string value."
+        },
+        "BooleanValue": {
+          "type": "boolean",
+          "description": "True / False."
+        }
+      }
+    }
+  }
+}
